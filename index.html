@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>코인 RPG: 네 성장을 던전으로!</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans KR', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .game-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            text-align: center;
+            padding: 30px;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            padding: 30px;
+        }
+        
+        .left-panel, .right-panel {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .character-stats {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .hp-bar {
+            width: 100%;
+            height: 20px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+        
+        .hp-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff6b6b, #ffa726);
+            transition: width 0.3s ease;
+        }
+        
+        .input-section {
+            margin-bottom: 20px;
+        }
+        
+        .input-section h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        input[type="text"] {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .command-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .game-log {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 10px;
+            height: 300px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .shop-items, .inventory-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .item-card {
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .item-card:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .item-name {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .item-stats {
+            color: #7f8c8d;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+        
+        .item-price {
+            color: #f39c12;
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        
+        .buy-btn {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+        
+        .battle-section {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .battle-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .battle-actions button {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.5);
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+        }
+        
+        .success { color: #27ae60; }
+        .error { color: #e74c3c; }
+        .info { color: #3498db; }
+        .warning { color: #f39c12; }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="header">
+            <h1>🎮 코인 RPG: 네 성장을 던전으로! ⚔️</h1>
+            <p>잘한 일로 코인을 모으고, 장비를 사서 던전을 정복하세요!</p>
+        </div>
+        
+        <div class="main-content">
+            <div class="left-panel">
+                <div class="character-stats">
+                    <h3>📊 캐릭터 정보</h3>
+                    <div class="stat-item">
+                        <span>레벨:</span>
+                        <span id="level">1</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>경험치:</span>
+                        <span id="exp">0%</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>HP:</span>
+                        <span id="hp">30/30</span>
+                    </div>
+                    <div class="hp-bar">
+                        <div class="hp-fill" id="hp-fill" style="width: 100%"></div>
+                    </div>
+                    <div class="stat-item">
+                        <span>💰 코인:</span>
+                        <span id="coins">10</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>⚔️ 공격력:</span>
+                        <span id="attack">1</span>
+                    </div>
+                </div>
+                
+                <div class="input-section">
+                    <h3>✅ 잘한 일 기록하기</h3>
+                    <div class="input-group">
+                        <input type="text" id="good-deed" placeholder="오늘 잘한 일을 적어보세요 (예: 30분 조깅함)">
+                        <button onclick="recordGoodDeed()">기록</button>
+                    </div>
+                </div>
+                
+                <div class="command-buttons">
+                    <button onclick="showShop()">🏪 상점</button>
+                    <button onclick="showInventory()">🎒 인벤토리</button>
+                    <button onclick="enterDungeon()">⚔️ 던전 입장</button>
+                    <button onclick="usePotion()">🧪 물약 사용</button>
+                </div>
+                
+                <div class="battle-section" id="battle-section">
+                    <h3 id="enemy-name">🐺 늑대</h3>
+                    <div class="stat-item">
+                        <span>적 HP:</span>
+                        <span id="enemy-hp">20/20</span>
+                    </div>
+                    <div class="battle-actions">
+                        <button onclick="attack()">⚔️ 공격</button>
+                        <button onclick="runAway()">🏃 도망</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="right-panel">
+                <div class="game-log" id="game-log">
+                    <div class="success">🎉 코인 RPG에 오신 것을 환영합니다!</div>
+                    <div class="info">💡 시작 보너스로 10코인을 받았습니다.</div>
+                    <div class="info">📝 잘한 일을 기록하여 코인을 모으세요!</div>
+                    <div class="info">🏪 상점에서 장비를 구매하고 던전에 도전하세요!</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 게임 상태
+        let gameState = {
+            level: 1,
+            exp: 0,
+            maxHp: 30,
+            currentHp: 30,
+            coins: 10,
+            baseAttack: 1,
+            weapon: null,
+            armor: null,
+            potions: { small: 0, large: 0 },
+            inBattle: false,
+            currentEnemy: null,
+            dungeonFloor: 0
+        };
+
+        // 상점 아이템
+        const shopItems = [
+            {
+                id: 'wooden_sword',
+                name: '나무검',
+                type: 'weapon',
+                attack: 2,
+                breakChance: 10,
+                price: 100,
+                description: '공격+2, 파괴확률 10%'
+            },
+            {
+                id: 'iron_sword',
+                name: '철검',
+                type: 'weapon',
+                attack: 4,
+                breakChance: 5,
+                price: 250,
+                description: '공격+4, 파괴확률 5%'
+            },
+            {
+                id: 'longbow',
+                name: '장궁',
+                type: 'weapon',
+                attack: 5,
+                breakChance: 5,
+                price: 350,
+                description: '공격+5, 선공 확률↑, 파괴확률 5%'
+            },
+            {
+                id: 'magic_book',
+                name: '마법서',
+                type: 'weapon',
+                attack: 3,
+                breakChance: 5,
+                price: 400,
+                description: '공격+3, 치유 스킬, 파괴확률 5%'
+            },
+            {
+                id: 'fire_staff',
+                name: '불의 지팡이',
+                type: 'weapon',
+                attack: 7,
+                breakChance: 5,
+                price: 600,
+                description: '공격+7, 화상 추가데미지, 파괴확률 5%'
+            },
+            {
+                id: 'leather_armor',
+                name: '가죽갑옷',
+                type: 'armor',
+                hp: 10,
+                breakChance: 10,
+                price: 120,
+                description: 'HP+10, 파괴확률 10%'
+            },
+            {
+                id: 'steel_armor',
+                name: '강철갑옷',
+                type: 'armor',
+                hp: 20,
+                breakChance: 5,
+                price: 300,
+                description: 'HP+20, 파괴확률 5%'
+            },
+            {
+                id: 'magic_cloak',
+                name: '마법 망토',
+                type: 'armor',
+                hp: 15,
+                breakChance: 5,
+                price: 450,
+                description: 'HP+15, 데미지 반사 10%, 파괴확률 5%'
+            },
+            {
+                id: 'small_potion',
+                name: '회복물약(소)',
+                type: 'potion',
+                heal: 15,
+                price: 50,
+                description: 'HP +15 즉시 회복'
+            },
+            {
+                id: 'large_potion',
+                name: '회복물약(대)',
+                type: 'potion',
+                heal: 40,
+                price: 120,
+                description: 'HP +40 즉시 회복'
+            }
+        ];
+
+        // 몬스터 데이터
+        const monsters = [
+            { name: '🐺 늑대', hp: 20, attack: 3, exp: 10, coins: 5 },
+            { name: '🐻 곰', hp: 35, attack: 5, exp: 20, coins: 12 },
+            { name: '🧌 오우거', hp: 50, attack: 7, exp: 30, coins: 18 },
+            { name: '🐉 드래곤', hp: 80, attack: 12, exp: 50, coins: 30 }
+        ];
+
+        function log(message, type = 'info') {
+            const gameLog = document.getElementById('game-log');
+            const div = document.createElement('div');
+            div.className = type;
+            div.innerHTML = message;
+            gameLog.appendChild(div);
+            gameLog.scrollTop = gameLog.scrollHeight;
+        }
+
+        function updateDisplay() {
+            document.getElementById('level').textContent = gameState.level;
+            document.getElementById('exp').textContent = gameState.exp + '%';
+            document.getElementById('hp').textContent = `${gameState.currentHp}/${gameState.maxHp}`;
+            document.getElementById('hp-fill').style.width = (gameState.currentHp / gameState.maxHp * 100) + '%';
+            document.getElementById('coins').textContent = gameState.coins;
+            
+            let totalAttack = gameState.baseAttack;
+            if (gameState.weapon) {
+                totalAttack += gameState.weapon.attack;
+            }
+            document.getElementById('attack').textContent = totalAttack;
+        }
+
+        function recordGoodDeed() {
+            const input = document.getElementById('good-deed');
+            const deed = input.value.trim();
+            
+            if (!deed) {
+                log('❌ 잘한 일을 입력해주세요!', 'error');
+                return;
+            }
+            
+            // AI처럼 코인 평가 (간단한 로직)
+            let earnedCoins = Math.floor(Math.random() * 20) + 10; // 10-30 코인
+            
+            if (deed.includes('운동') || deed.includes('조깅') || deed.includes('헬스')) {
+                earnedCoins += 10;
+            }
+            if (deed.includes('공부') || deed.includes('독서') || deed.includes('학습')) {
+                earnedCoins += 8;
+            }
+            if (deed.includes('도움') || deed.includes('봉사') || deed.includes('친절')) {
+                earnedCoins += 15;
+            }
+            
+            earnedCoins = Math.min(earnedCoins, 50); // 최대 50코인
+            
+            gameState.coins += earnedCoins;
+            
+            log(`✅ "${deed}" - ${earnedCoins}코인 획득!`, 'success');
+            log(`💰 현재 코인: ${gameState.coins}`, 'info');
+            
+            input.value = '';
+            updateDisplay();
+        }
+
+        function showShop() {
+            const logElement = document.getElementById('game-log');
+            logElement.innerHTML = '<div class="info">🏪 상점</div>';
+            
+            const shopContainer = document.createElement('div');
+            shopContainer.className = 'shop-items';
+            
+            shopItems.forEach(item => {
+                const itemCard = document.createElement('div');
+                itemCard.className = 'item-card';
+                itemCard.innerHTML = `
+                    <div class="item-name">${item.name}</div>
+                    <div class="item-stats">${item.description}</div>
+                    <div class="item-price">${item.price} 코인</div>
+                    <button class="buy-btn" onclick="buyItem('${item.id}')">구매</button>
+                `;
+                shopContainer.appendChild(itemCard);
+            });
+            
+            logElement.appendChild(shopContainer);
+        }
+
+        function buyItem(itemId) {
+            const item = shopItems.find(i => i.id === itemId);
+            
+            if (!item) {
+                log('❌ 아이템을 찾을 수 없습니다.', 'error');
+                return;
+            }
+            
+            if (gameState.coins < item.price) {
+                log('❌ 코인이 부족합니다!', 'error');
+                return;
+            }
+            
+            gameState.coins -= item.price;
+            
+            if (item.type === 'weapon') {
+                if (gameState.weapon) {
+                    log(`⚔️ 기존 무기 ${gameState.weapon.name}를 교체합니다.`, 'info');
+                }
+                gameState.weapon = item;
+                log(`⚔️ ${item.name}을(를) 장착했습니다!`, 'success');
+            } else if (item.type === 'armor') {
+                if (gameState.armor) {
+                    gameState.maxHp -= gameState.armor.hp;
+                    log(`🛡️ 기존 방어구 ${gameState.armor.name}를 교체합니다.`, 'info');
+                }
+                gameState.armor = item;
+                gameState.maxHp += item.hp;
+                gameState.currentHp = Math.min(gameState.currentHp + item.hp, gameState.maxHp);
+                log(`🛡️ ${item.name}을(를) 장착했습니다!`, 'success');
+            } else if (item.type === 'potion') {
+                if (item.id === 'small_potion') {
+                    gameState.potions.small++;
+                } else if (item.id === 'large_potion') {
+                    gameState.potions.large++;
+                }
+                log(`🧪 ${item.name}을(를) 구매했습니다!`, 'success');
+            }
+            
+            updateDisplay();
+        }
+
+        function showInventory() {
+            const logElement = document.getElementById('game-log');
+            logElement.innerHTML = '<div class="info">🎒 인벤토리</div>';
+            
+            log(`💰 코인: ${gameState.coins}`, 'info');
+            log(`⚔️ 무기: ${gameState.weapon ? gameState.weapon.name : '없음'}`, 'info');
+            log(`🛡️ 방어구: ${gameState.armor ? gameState.armor.name : '없음'}`, 'info');
+            log(`🧪 회복물약(소): ${gameState.potions.small}개`, 'info');
+            log(`🧪 회복물약(대): ${gameState.potions.large}개`, 'info');
+        }
+
+        function enterDungeon() {
+            if (gameState.inBattle) {
+                log('❌ 이미 전투 중입니다!', 'error');
+                return;
+            }
+            
+            gameState.dungeonFloor++;
+            const monsterIndex = Math.min(Math.floor(gameState.dungeonFloor / 3), monsters.length - 1);
+            const monster = { ...monsters[monsterIndex] };
+            monster.maxHp = monster.hp;
+            
+            gameState.currentEnemy = monster;
+            gameState.inBattle = true;
+            
+            document.getElementById('battle-section').style.display = 'block';
+            document.getElementById('enemy-name').textContent = monster.name;
+            document.getElementById('enemy-hp').textContent = `${monster.hp}/${monster.maxHp}`;
+            
+            log(`⚔️ 던전 ${gameState.dungeonFloor}층에서 ${monster.name}와(과) 조우했습니다!`, 'warning');
+        }
+
+        function attack() {
+            if (!gameState.inBattle || !gameState.currentEnemy) return;
+            
+            let damage = gameState.baseAttack;
+            if (gameState.weapon) {
+                damage += gameState.weapon.attack;
+                
+                // 무기 파괴 체크
+                if (Math.random() * 100 < gameState.weapon.breakChance) {
+                    log(`💥 ${gameState.weapon.name}이(가) 파괴되었습니다!`, 'error');
+                    gameState.weapon = null;
+                }
+            }
+            
+            gameState.currentEnemy.hp -= damage;
+            log(`⚔️ ${damage} 데미지를 입혔습니다!`, 'success');
+            
+            if (gameState.currentEnemy.hp <= 0) {
+                // 몬스터 처치
+                gameState.exp += gameState.currentEnemy.exp;
+                gameState.coins += gameState.currentEnemy.coins;
+                
+                log(`🎉 ${gameState.currentEnemy.name}를 처치했습니다!`, 'success');
+                log(`📈 경험치 +${gameState.currentEnemy.exp}, 코인 +${gameState.currentEnemy.coins}`, 'info');
+                
+                // 레벨업 체크
+                if (gameState.exp >= 100) {
+                    gameState.level++;
+                    gameState.exp -= 100;
+                    gameState.maxHp += 5;
+                    gameState.currentHp = gameState.maxHp;
+                    gameState.baseAttack++;
+                    
+                    log(`🌟 레벨업! 레벨 ${gameState.level}이 되었습니다!`, 'success');
+                    log(`💪 최대 HP +5, 공격력 +1`, 'info');
+                }
+                
+                endBattle();
+                updateDisplay();
+                return;
+            }
+            
+            // 몬스터 반격
+            const enemyDamage = gameState.currentEnemy.attack;
+            gameState.currentHp -= enemyDamage;
+            log(`💥 ${gameState.currentEnemy.name}의 공격! ${enemyDamage} 데미지를 받았습니다!`, 'error');
+            
+            if (gameState.currentHp <= 0) {
+                gameState.currentHp = 0;
+                log(`💀 당신은 쓰러졌습니다... 던전에서 탈출합니다.`, 'error');
+                log(`😢 획득 코인의 50%를 잃었습니다.`, 'warning');
+                
+                // 체력 회복, 코인 50% 손실
+                gameState.currentHp = gameState.maxHp;
+                gameState.coins = Math.floor(gameState.coins * 0.5);
+                endBattle();
+            }
+            
+            document.getElementById('enemy-hp').textContent = `${gameState.currentEnemy.hp}/${gameState.currentEnemy.maxHp}`;
+            updateDisplay();
+        }
+
+        function runAway() {
+            if (!gameState.inBattle) return;
+            
+            log(`🏃 전투에서 도망쳤습니다.`, 'warning');
+            endBattle();
+        }
+
+        function endBattle() {
+            gameState.inBattle = false;
+            gameState.currentEnemy = null;
+            document.getElementById('battle-section').style.display = 'none';
+        }
+
+        function usePotion() {
+            if (gameState.potions.large > 0) {
+                gameState.potions.large--;
+                const healAmount = Math.min(40, gameState.maxHp - gameState.currentHp);
+                gameState.currentHp += healAmount;
+                log(`🧪 회복물약(대) 사용! HP +${healAmount}`, 'success');
+            } else if (gameState.potions.small > 0) {
+                gameState.potions.small--;
+                const healAmount = Math.min(15, gameState.maxHp - gameState.currentHp);
+                gameState.currentHp += healAmount;
+                log(`🧪 회복물약(소) 사용! HP +${healAmount}`, 'success');
+            } else {
+                log(`❌ 사용할 수 있는 물약이 없습니다.`, 'error');
+                return;
+            }
+            updateDisplay();
+        }
+
+        // Enter 키로 잘한 일 기록
+        document.getElementById('good-deed').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                recordGoodDeed();
+            }
+        });
+
+        // 게임 시작시 초기화
+        updateDisplay();
+    </script>
+</body>
+</html>
