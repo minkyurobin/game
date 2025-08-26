@@ -3,29 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>클래시 로얄 코인 RPG</title>
+    <title>2인용 오목 게임 (19x19)</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Bangers&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Bangers', cursive;
+            font-family: 'Roboto', sans-serif;
         }
 
         body {
-            background: url('https://clashroyale.com/images/backgrounds/arena.jpg') no-repeat center/cover fixed;
+            background: linear-gradient(135deg, #f0f4f8, #d9e2ec);
             min-height: 100vh;
-            color: #fff;
             display: flex;
             flex-direction: column;
             align-items: center;
-            overflow-x: hidden;
+            color: #333;
         }
 
-        /* Nickname Screen */
-        .nickname-screen {
+        /* Start Screen */
+        .start-screen {
             position: fixed;
             top: 0;
             left: 0;
@@ -38,305 +37,128 @@
             z-index: 2000;
         }
 
-        .nickname-container {
-            background: linear-gradient(145deg, #1e3a5f, #2c5282);
-            border: 4px solid #ffd700;
-            border-radius: 15px;
-            padding: 25px;
+        .start-container {
+            background: #fff;
+            border: 3px solid #2c5282;
+            border-radius: 12px;
+            padding: 20px;
             text-align: center;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
             max-width: 350px;
             width: 90%;
         }
 
         .game-logo {
-            font-size: 2.2em;
-            color: #ffd700;
-            text-shadow: 0 0 8px #ff6b35;
+            font-size: 2em;
+            color: #2c5282;
             margin-bottom: 10px;
         }
 
-        .game-subtitle {
-            font-size: 1em;
-            color: #e0e7ff;
-            margin-bottom: 15px;
-        }
-
-        .nickname-input {
+        .time-select {
             width: 100%;
             padding: 10px;
             font-size: 14px;
-            border: 3px solid #3498db;
-            border-radius: 8px;
+            border: 2px solid #2c5282;
+            border-radius: 6px;
+            margin: 8px 0;
             background: #fff;
-            color: #2c3e50;
-            text-align: center;
-            margin-bottom: 15px;
-            transition: border-color 0.3s;
-        }
-
-        .nickname-input:focus {
-            outline: none;
-            border-color: #ffd700;
-            box-shadow: 0 0 8px #ffd700;
         }
 
         .start-btn {
             width: 100%;
             padding: 10px;
             font-size: 16px;
-            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            background: linear-gradient(45deg, #2c5282, #3b82f6);
             border: none;
-            border-radius: 8px;
+            border-radius: 6px;
             color: #fff;
             cursor: pointer;
-            box-shadow: 0 4px 10px rgba(247, 147, 30, 0.5);
             transition: transform 0.2s, box-shadow 0.2s;
         }
 
         .start-btn:hover {
             transform: scale(1.05);
-            box-shadow: 0 6px 15px rgba(247, 147, 30, 0.7);
-        }
-
-        /* Top Header */
-        .top-header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(180deg, #1e3a5f, #2c5282);
-            padding: 8px 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 100;
-            border-bottom: 3px solid #ffd700;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
-        }
-
-        .player-info {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .player-avatar {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(45deg, #e74c3c, #c0392b);
-            border: 3px solid #ffd700;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2em;
-        }
-
-        .player-details h3 {
-            font-size: 1em;
-            color: #ffd700;
-        }
-
-        .player-title {
-            font-size: 0.8em;
-            color: #bdc3c7;
-        }
-
-        .resources {
-            display: flex;
-            gap: 8px;
-        }
-
-        .resource-item {
-            background: linear-gradient(45deg, #8e44ad, #9b59b6);
-            padding: 6px 10px;
-            border-radius: 6px;
-            font-size: 0.8em;
-            border: 2px solid #fff3;
-        }
-
-        .resource-icon {
-            font-size: 1em;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
         }
 
         /* Game Container */
         .game-container {
-            margin-top: 70px;
-            padding: 10px;
-            max-width: 900px;
+            margin-top: 20px;
+            text-align: center;
+            max-width: 600px;
             width: 100%;
+            padding: 10px;
+            display: none;
         }
 
-        /* Card Styles */
-        .game-card {
-            background: linear-gradient(145deg, #2c5282, #1e3a5f);
-            border: 3px solid #ffd700;
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-            transition: transform 0.2s;
-        }
-
-        .game-card:hover {
-            transform: translateY(-2px);
-        }
-
-        .card-title {
-            font-size: 1.3em;
-            color: #ffd700;
-            text-align: center;
-            margin-bottom: 10px;
-            text-shadow: 0 0 5px #ff6b35;
-        }
-
-        /* Character Panel */
-        .character-section {
-            text-align: center;
-        }
-
-        .character-avatar-large {
-            width: 100px;
-            height: 100px;
-            background: linear-gradient(45deg, #e74c3c, #c0392b);
-            border: 4px solid #ffd700;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.5em;
-            margin: 0 auto 15px;
-        }
-
-        .level-display {
-            background: linear-gradient(45deg, #3498db, #2980b9);
-            border-radius: 8px;
-            padding: 8px;
-            margin-bottom: 10px;
-            border: 2px solid #ffd700;
-        }
-
-        .level-text {
-            font-size: 1em;
-            font-weight: 400;
-        }
-
-        .progress-bar {
-            background: #2c3e50;
-            height: 8px;
-            border-radius: 4px;
-            overflow: hidden;
-            border: 1px solid #fff3;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #27ae60, #2ecc71);
-            transition: width 0.5s ease;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
-        }
-
-        .stat-item {
-            background: #2c5282;
-            padding: 8px;
-            border-radius: 6px;
-            text-align: center;
-            border: 1px solid #fff3;
-        }
-
-        .stat-icon {
+        .turn-info {
             font-size: 1.2em;
-        }
-
-        .stat-value {
-            font-size: 1em;
-            color: #ffd700;
-        }
-
-        /* Action Panel */
-        .deed-input-section {
             margin-bottom: 10px;
+            color: #2c5282;
         }
 
-        .deed-input-container {
+        .turn-info span {
+            font-weight: 700;
+            color: #e74c3c;
+        }
+
+        canvas {
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .button-container {
+            margin-top: 10px;
             display: flex;
-            gap: 8px;
+            justify-content: center;
+            gap: 10px;
         }
 
-        .deed-input {
-            flex: 1;
-            padding: 8px;
-            font-size: 13px;
-            border: 2px solid #3498db;
-            border-radius: 6px;
-            background: #fff;
-            color: #2c3e50;
-        }
-
-        .deed-input:focus {
-            outline: none;
-            border-color: #ffd700;
-        }
-
-        .cr-button {
+        .restart-btn, .skill-btn, .egg-skill-btn {
             padding: 8px 12px;
-            font-size: 13px;
+            font-size: 14px;
             border: none;
             border-radius: 6px;
             color: #fff;
             cursor: pointer;
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
             transition: transform 0.2s, box-shadow 0.2s;
         }
 
-        .cr-button:hover {
+        .restart-btn {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+        }
+
+        .skill-btn {
+            background: linear-gradient(45deg, #f39c12, #e67e22);
+        }
+
+        .egg-skill-btn {
+            background: linear-gradient(45deg, #27ae60, #2ecc71);
+        }
+
+        .restart-btn:hover, .skill-btn:hover, .egg-skill-btn:hover {
             transform: scale(1.05);
-            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
         }
 
-        .btn-record { background: linear-gradient(45deg, #27ae60, #2ecc71); }
-        .btn-battle { background: linear-gradient(45deg, #e74c3c, #c0392b); }
-        .btn-shop { background: linear-gradient(45deg, #f39c12, #e67e22); }
-        .btn-ranking { background: linear-gradient(45deg, #9b59b6, #8e44ad); }
-        .btn-stats { background: linear-gradient(45deg, #34495e, #2c3e50); }
-
-        .button-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
-        }
-
-        /* Battle Arena */
-        .battle-arena {
-            text-align: center;
-            padding: 15px;
-        }
-
-        .arena-enemy {
-            font-size: 4em;
-            margin: 15px 0;
-        }
-
-        .arena-description {
-            font-size: 0.9em;
-            margin-bottom: 10px;
+        .skill-btn:disabled, .egg-skill-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
         }
 
         /* Game Log */
         .game-log {
-            background: #2c3e50;
+            background: #fff;
+            border: 2px solid #2c5282;
             border-radius: 8px;
             padding: 10px;
             max-height: 150px;
             overflow-y: auto;
             font-family: 'Courier New', monospace;
             font-size: 0.8em;
+            margin-top: 10px;
         }
 
         .log-entry {
@@ -346,10 +168,10 @@
             border-left: 2px solid;
         }
 
-        .log-success { border-left-color: #2ecc71; color: #2ecc71; }
+        .log-success { border-left-color: #27ae60; color: #27ae60; }
         .log-error { border-left-color: #e74c3c; color: #e74c3c; }
+        .log-info { border-left-color: #2c5282; color: #2c5282; }
         .log-warning { border-left-color: #f39c12; color: #f39c12; }
-        .log-info { border-left-color: #3498db; color: #3498db; }
 
         /* Modal */
         .modal {
@@ -366,483 +188,569 @@
         }
 
         .modal-content {
-            background: linear-gradient(145deg, #2c5282, #1e3a5f);
-            border: 3px solid #ffd700;
+            background: #fff;
+            border: 3px solid #2c5282;
             border-radius: 12px;
-            padding: 15px;
+            padding: 20px;
             max-width: 300px;
             width: 90%;
             text-align: center;
         }
 
         .modal-content h2 {
-            color: #ffd700;
-            font-size: 1.2em;
-            margin-bottom: 10px;
-        }
-
-        .modal-content ul {
-            list-style: none;
-            padding: 0;
-            font-size: 0.9em;
-        }
-
-        .modal-content li {
-            margin: 8px 0;
+            color: #2c5282;
+            font-size: 1.3em;
+            margin-bottom: 15px;
         }
 
         .modal-content button {
             padding: 8px 12px;
-            background: linear-gradient(45deg, #27ae60, #2ecc71);
+            background: linear-gradient(45deg, #2c5282, #3b82f6);
             border: none;
             border-radius: 6px;
             color: #fff;
             cursor: pointer;
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+            margin: 5px;
         }
 
-        .modal-content button:disabled {
-            background: #7f8c8d;
-            cursor: not-allowed;
+        .modal-content button:hover {
+            background: linear-gradient(45deg, #3b82f6, #2c5282);
         }
 
         /* Responsive Design */
-        @media (max-width: 768px) {
-            .game-container { padding: 8px; }
-            .stats-grid { grid-template-columns: 1fr; }
-            .button-grid { grid-template-columns: 1fr; }
-            .deed-input-container { flex-direction: column; }
-            .resources { flex-direction: column; gap: 6px; }
-            .nickname-container { padding: 20px; max-width: 300px; }
-            .game-logo { font-size: 1.8em; }
-            .modal-content { max-width: 250px; }
+        @media (max-width: 600px) {
+            canvas {
+                width: 100%;
+                height: auto;
+            }
+            .start-container {
+                padding: 15px;
+                max-width: 280px;
+            }
+            .game-logo {
+                font-size: 1.6em;
+            }
+            .modal-content {
+                max-width: 250px;
+            }
+            .game-log {
+                max-height: 100px;
+            }
+            .button-container {
+                flex-direction: column;
+                gap: 5px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Nickname Screen -->
-    <div class="nickname-screen" id="nickname-screen">
-        <div class="nickname-container">
-            <div class="game-logo">⚔️ 코인 RPG</div>
-            <div class="game-subtitle">클래시 로얄 에디션</div>
-            <input type="text" class="nickname-input" id="nickname-input" placeholder="닉네임 (3-12자)" maxlength="12" aria-label="닉네임 입력">
+    <!-- Start Screen -->
+    <div class="start-screen" id="start-screen">
+        <div class="start-container">
+            <div class="game-logo">⚫⚪ 오목 게임 (19x19)</div>
+            <select class="time-select" id="time-limit" aria-label="시간 제한 선택">
+                <option value="10000">10초</option>
+                <option value="30000">30초</option>
+                <option value="60000">1분</option>
+            </select>
             <button class="start-btn" onclick="startGame()" aria-label="게임 시작">게임 시작</button>
         </div>
     </div>
 
-    <!-- Top Header -->
-    <div class="top-header" id="top-header" style="display: none;">
-        <div class="player-info">
-            <div class="player-avatar" id="player-avatar">👑</div>
-            <div class="player-details">
-                <h3 id="player-name">플레이어</h3>
-                <div class="player-title" id="player-title">초보 모험가</div>
-            </div>
-        </div>
-        <div class="resources">
-            <div class="resource-item">
-                <span class="resource-icon">💰</span>
-                <span id="header-coins">10</span>
-            </div>
-            <div class="resource-item">
-                <span class="resource-icon">💎</span>
-                <span id="header-score">0</span>
-            </div>
-            <div class="resource-item">
-                <span class="resource-icon">⚡</span>
-                <span id="header-level">1</span>
-            </div>
-        </div>
-    </div>
-
     <!-- Game Container -->
-    <div class="game-container" id="game-container" style="display: none;">
-        <!-- Character Panel -->
-        <div class="game-card">
-            <div class="card-title">🏛️ 캐릭터</div>
-            <div class="character-section">
-                <div class="character-avatar-large" id="character-avatar">👑</div>
-                <div class="level-display">
-                    <div class="level-text">레벨 <span id="level">1</span> - <span id="level-title">초보 모험가</span></div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="exp-fill" style="width: 0%"></div>
-                    </div>
-                    <div style="margin-top: 5px; font-size: 0.8em;">EXP: <span id="exp">0</span>/100</div>
-                </div>
-                <div class="stats-grid">
-                    <div class="stat-item">
-                        <div class="stat-icon">❤️</div>
-                        <div>체력</div>
-                        <div class="stat-value"><span id="current-hp">30</span>/<span id="max-hp">30</span></div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-icon">💰</div>
-                        <div>코인</div>
-                        <div class="stat-value" id="coins">10</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-icon">💎</div>
-                        <div>총점</div>
-                        <div class="stat-value" id="total-score">0</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-icon">📝</div>
-                        <div>기록</div>
-                        <div class="stat-value" id="deeds-count">0</div>
-                    </div>
-                </div>
-            </div>
+    <div class="game-container" id="game-container">
+        <div class="turn-info" id="turn-info">턴: <span>흑</span> (● 흑돌)</div>
+        <canvas id="game-board" width="570" height="570"></canvas>
+        <div class="button-container">
+            <button class="restart-btn" onclick="restartGame()" aria-label="다시 시작">다시 시작</button>
+            <button class="skill-btn" id="skill-btn" onclick="useMeteorStrike()" aria-label="운석 낙하">운석 낙하 (2)</button>
+            <button class="egg-skill-btn" id="egg-skill-btn" onclick="toggleEggSkillMode()" aria-label="알까기">알까기 (3)</button>
         </div>
-
-        <!-- Action Panel -->
-        <div class="game-card">
-            <div class="card-title">✅ 잘한 일</div>
-            <div class="deed-input-section">
-                <div class="deed-input-container">
-                    <input type="text" class="deed-input" id="good-deed" placeholder="잘한 일 입력" aria-label="잘한 일 입력">
-                    <button class="cr-button btn-record" onclick="recordGoodDeed()" aria-label="기록">기록</button>
-                </div>
-                <div style="font-size: 11px; opacity: 0.8; text-align: center; margin-top: 8px;">
-                    💡 운동, 공부, 도움 키워드 보너스!
-                </div>
-            </div>
-            <div class="button-grid">
-                <button class="cr-button btn-battle" onclick="startBattle()" aria-label="던전">⚔️ 던전</button>
-                <button class="cr-button btn-shop" onclick="showShop()" aria-label="상점">🏪 상점</button>
-                <button class="cr-button btn-ranking" onclick="showRanking()" aria-label="랭킹">🏆 랭킹</button>
-                <button class="cr-button btn-stats" onclick="showStats()" aria-label="통계">📊 통계</button>
-            </div>
-        </div>
-
-        <!-- Battle Arena -->
-        <div class="game-card">
-            <div class="card-title">⚔️ 아레나</div>
-            <div class="battle-arena">
-                <div class="arena-enemy">🏰</div>
-                <div class="arena-description">던전에서 보물을 획득!</div>
-                <button class="cr-button btn-battle" onclick="startBattle()" aria-label="전투">⚔️ 전투</button>
-            </div>
-        </div>
-
-        <!-- Game Log -->
-        <div class="game-card">
-            <div class="card-title">📜 로그</div>
-            <div class="game-log" id="game-log">
-                <div class="log-entry log-info">🎉 클래시 로얄 코인 RPG!</div>
-                <div class="log-entry log-success">💰 10코인 획득!</div>
-            </div>
+        <div class="game-log" id="game-log">
+            <div class="log-entry log-info">🎉 오목 게임 시작!</div>
         </div>
     </div>
 
     <script>
-        let playerName = '';
-        let gameState = {
-            level: 1,
-            exp: 0,
-            maxHp: 30,
-            currentHp: 30,
-            coins: 10,
-            totalScore: 0,
-            deedsRecorded: 0,
-            playerName: ''
-        };
+        const canvas = document.getElementById('game-board');
+        const ctx = canvas.getContext('2d');
+        const boardSize = 19;
+        const cellSize = 30;
+        let board = Array(boardSize).fill().map(() => Array(boardSize).fill(0)); // 0: 빈칸, 1: 흑돌, 2: 백돌
+        let currentPlayer = 1; // 1: 흑돌, 2: 백돌
+        let player1Name = '흑';
+        let player2Name = '백';
+        let gameActive = false;
+        let timeLimit = 10000; // 기본 10초
+        let timerId = null;
+        let timeLeft = 0;
         let logs = [];
-        let battleTimer = null;
-        let isLuckyCharmActive = false;
-        let coinBoostEndTime = 0;
-        let attackBoost = 0;
-
-        const levelTitles = {
-            1: "초보 모험가", 3: "견습 전사", 5: "용감한 기사",
-            8: "숙련된 전사", 12: "베테랑 용사", 15: "정예 챔피언",
-            20: "전설의 영웅", 25: "마스터 워리어", 30: "얼티밋 레전드"
-        };
+        let moveCount = 0; // 돌 배치 횟수 추적
+        let player1MeteorSkill = 2; // 운석 스킬 횟수
+        let player2MeteorSkill = 2;
+        let player1EggSkill = 3; // 알까기 스킬 횟수
+        let player2EggSkill = 3;
+        let isEggSkillMode = false;
+        let selectedRow = -1;
+        let selectedCol = -1;
+        let dragStartX = 0;
+        let dragStartY = 0;
+        let dragEndX = 0;
+        let dragEndY = 0;
+        let isDragging = false;
+        let animationFrameId = null;
 
         document.addEventListener('DOMContentLoaded', () => {
-            // Always show nickname screen on load, even with saved state
-            document.getElementById('nickname-screen').style.display = 'flex';
-            document.getElementById('top-header').style.display = 'none';
-            document.getElementById('game-container').style.display = 'none';
-
-            const savedState = localStorage.getItem('gameState');
-            if (savedState) {
-                gameState = JSON.parse(savedState);
-                playerName = gameState.playerName || '';
-                if (playerName) {
-                    document.getElementById('nickname-input').value = playerName;
-                }
-            }
-
-            document.getElementById('nickname-input').addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') startGame();
-            });
-
-            document.getElementById('good-deed').addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') recordGoodDeed();
-            });
+            drawBoard();
+            updateSkillButton();
+            updateEggSkillButton();
         });
 
         function startGame() {
-            const nickname = document.getElementById('nickname-input').value.trim();
-            if (!nickname) {
-                showModal('닉네임을 입력해주세요!', 'error');
-                return;
-            }
-            if (nickname.length < 3) {
-                showModal('닉네임을 더 길게 입력해주세요! (3-12자)', 'error');
-                return;
-            }
-            if (nickname.length > 12) {
-                showModal('닉네임은 12자를 초과할 수 없습니다!', 'error');
-                return;
-            }
-
-            playerName = nickname;
-            gameState.playerName = playerName;
-            document.getElementById('nickname-screen').style.display = 'none';
-            document.getElementById('top-header').style.display = 'flex';
+            timeLimit = parseInt(document.getElementById('time-limit').value);
+            document.getElementById('start-screen').style.display = 'none';
             document.getElementById('game-container').style.display = 'block';
-            updateAllDisplays();
-            saveGameState();
-            log(`🎉 ${playerName}님, 모험 시작!`, 'success');
+            gameActive = true;
+            moveCount = 0;
+            player1MeteorSkill = 2;
+            player2MeteorSkill = 2;
+            player1EggSkill = 3;
+            player2EggSkill = 3;
+            isEggSkillMode = false;
+            selectedRow = -1;
+            selectedCol = -1;
+            startTimer();
+            updateTurnInfo();
+            drawBoard();
+            updateSkillButton();
+            updateEggSkillButton();
+            log('🎉 게임 시작!', 'info');
         }
 
-        function recordGoodDeed() {
-            const input = document.getElementById('good-deed');
-            const deed = input.value.trim();
-            if (!deed) {
-                log('잘한 일을 입력해주세요!', 'error');
+        function drawBoard() {
+            // 무지개색 그라디언트 배경
+            const gradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
+            const hue = (Date.now() / 1000) % 360;
+            gradient.addColorStop(0, `hsl(${hue}, 80%, 50%)`);
+            gradient.addColorStop(0.2, `hsl(${hue + 60}, 80%, 50%)`);
+            gradient.addColorStop(0.4, `hsl(${hue + 120}, 80%, 50%)`);
+            gradient.addColorStop(0.6, `hsl(${hue + 180}, 80%, 50%)`);
+            gradient.addColorStop(0.8, `hsl(${hue + 240}, 80%, 50%)`);
+            gradient.addColorStop(1, `hsl(${hue + 300}, 80%, 50%)`);
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // 오목 보드 배경색 변화 (시간에 따라 청색 → 빨강)
+            const fullness = timeLeft / (timeLimit / 1000); // 1 (만땅) ~ 0 (초과)
+            const baseHue = 240; // 만땅: 청색 (hue 240)
+            const targetHue = 0; // 초과: 빨강 (hue 0)
+            const boardHue = baseHue - (baseHue - targetHue) * (1 - fullness);
+            ctx.fillStyle = `hsl(${boardHue}, 50%, 70%)`;
+            ctx.fillRect(cellSize / 2, cellSize / 2, canvas.width - cellSize, canvas.height - cellSize);
+
+            // 격자 그리기
+            ctx.strokeStyle = '#333';
+            ctx.lineWidth = 1;
+            for (let i = 0; i < boardSize; i++) {
+                ctx.beginPath();
+                ctx.moveTo(cellSize / 2 + i * cellSize, cellSize / 2);
+                ctx.lineTo(cellSize / 2 + i * cellSize, canvas.height - cellSize / 2);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(cellSize / 2, cellSize / 2 + i * cellSize);
+                ctx.lineTo(canvas.width - cellSize / 2, cellSize / 2 + i * cellSize);
+                ctx.stroke();
+            }
+
+            // 시간 표시
+            ctx.font = '24px Roboto';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            const textGradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
+            textGradient.addColorStop(0, `hsl(${hue + 30}, 80%, 50%)`);
+            textGradient.addColorStop(0.5, `hsl(${hue + 90}, 80%, 50%)`);
+            textGradient.addColorStop(1, `hsl(${hue + 150}, 80%, 50%)`);
+            ctx.fillStyle = textGradient;
+            ctx.fillText(`남은 시간: ${timeLeft}초`, canvas.width / 2, 20);
+
+            // 돌 그리기
+            for (let row = 0; row < boardSize; row++) {
+                for (let col = 0; col < boardSize; col++) {
+                    if (board[row][col] === 1) {
+                        ctx.fillStyle = '#000';
+                        drawStone(row, col, 1.0);
+                    } else if (board[row][col] === 2) {
+                        ctx.fillStyle = '#fff';
+                        drawStone(row, col, 1.0);
+                    }
+                }
+            }
+        }
+
+        function drawStone(row, col, opacity = 1.0) {
+            ctx.globalAlpha = opacity;
+            ctx.beginPath();
+            ctx.arc(cellSize / 2 + col * cellSize, cellSize / 2 + row * cellSize, cellSize / 2 - 2, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = '#333';
+            ctx.lineWidth = 1;
+            ctx.stroke();
+            ctx.globalAlpha = 1.0;
+        }
+
+        function startTimer() {
+            if (timerId) clearInterval(timerId);
+            if (isEggSkillMode) return; // 알까기 모드에서는 타이머 중지
+            timeLeft = timeLimit / 1000;
+            drawBoard();
+            timerId = setInterval(() => {
+                timeLeft--;
+                drawBoard();
+                if (timeLeft <= 0) {
+                    clearInterval(timerId);
+                    const loser = currentPlayer === 1 ? player1Name : player2Name;
+                    const winner = currentPlayer === 1 ? player2Name : player1Name;
+                    log(`${loser}님 시간 초과 패배!`, 'error');
+                    showModal(`${winner}님 시간패 승리!`, 'success', true);
+                    gameActive = false;
+                }
+            }, 1000);
+        }
+
+        function removeRandomOpponentStone() {
+            if (moveCount < 2) return; // 첫 턴에서는 제거하지 않음
+            const opponent = currentPlayer === 1 ? 2 : 1;
+            const opponentStones = [];
+
+            // 상대방 돌 위치 수집
+            for (let row = 0; row < boardSize; row++) {
+                for (let col = 0; col < boardSize; col++) {
+                    if (board[row][col] === opponent) {
+                        opponentStones.push({ row, col });
+                    }
+                }
+            }
+
+            if (opponentStones.length === 0) {
+                log('⚡ 제거할 상대방 돌이 없습니다!', 'warning');
                 return;
             }
 
-            let baseCoins = 15;
-            let bonusCoins = 0;
-            const bonusKeywords = {
-                운동: ['운동', '조깅', '달리기', '헬스', '요가', '수영', '산책'],
-                공부: ['공부', '독서', '학습', '강의', '시험', '과제', '책'],
-                도움: ['도움', '봉사', '기부', '친절', '배려', '청소', '설거지']
-            };
+            // 10% 확률로 제거
+            if (Math.random() < 0.1) {
+                const randomIndex = Math.floor(Math.random() * opponentStones.length);
+                const { row, col } = opponentStones[randomIndex];
+                board[row][col] = 0;
+                log(`⚡ ${currentPlayer === 1 ? player2Name : player1Name}님의 돌 (${row + 1}, ${col + 1}) 제거!`, 'warning');
+                drawBoard();
+            }
+        }
 
-            let bonusCategories = [];
-            for (const [category, words] of Object.entries(bonusKeywords)) {
-                for (const word of words) {
-                    if (deed.includes(word)) {
-                        bonusCoins += 10;
-                        bonusCategories.push(category);
-                        break;
+        function useMeteorStrike() {
+            if (!gameActive) return;
+            const skillCount = currentPlayer === 1 ? player1MeteorSkill : player2MeteorSkill;
+            if (skillCount <= 0) {
+                showModal(`${currentPlayer === 1 ? player1Name : player2Name}님은 운석 스킬을 모두 사용했습니다!`, 'error');
+                return;
+            }
+
+            // 빈칸 수집
+            const emptyCells = [];
+            for (let row = 0; row < boardSize; row++) {
+                for (let col = 0; col < boardSize; col++) {
+                    if (board[row][col] === 0) {
+                        emptyCells.push({ row, col });
                     }
                 }
             }
 
-            let totalCoins = baseCoins + bonusCoins;
-            if (coinBoostEndTime > Date.now()) {
-                totalCoins *= 2;
-                log('💎 코인 2배!', 'warning');
+            if (emptyCells.length === 0) {
+                showModal('빈칸이 없어 스킬을 사용할 수 없습니다!', 'error');
+                return;
             }
 
-            const earnedExp = Math.floor(totalCoins / 3);
-            gameState.coins += totalCoins;
-            gameState.exp += earnedExp;
-            gameState.deedsRecorded++;
-            gameState.totalScore += totalCoins * 2;
+            // 최대 10개 돌 배치
+            const stonesToPlace = Math.min(10, emptyCells.length);
+            for (let i = 0; i < stonesToPlace; i++) {
+                const randomIndex = Math.floor(Math.random() * emptyCells.length);
+                const { row, col } = emptyCells[randomIndex];
+                board[row][col] = currentPlayer;
+                emptyCells.splice(randomIndex, 1);
+                log(`☄ 운석 낙하: (${row + 1}, ${col + 1})에 돌 배치`, 'info');
+            }
 
-            if (gameState.exp >= 100) levelUp();
+            drawBoard();
+            log(`☄ ${currentPlayer === 1 ? player1Name : player2Name}님이 운석 낙하 스킬 사용!`, 'warning');
 
-            log(`📝 "${deed}" 기록`, 'success');
-            log(`💰 +${totalCoins}코인, ✨ +${earnedExp}EXP`, 'info');
-            if (bonusCategories.length) log(`🎉 ${bonusCategories.join(', ')} 보너스`, 'warning');
+            if (currentPlayer === 1) player1MeteorSkill--;
+            else player2MeteorSkill--;
+            updateSkillButton();
 
-            input.value = '';
-            updateAllDisplays();
-            saveGameState();
-        }
-
-        function levelUp() {
-            const levelsGained = Math.floor(gameState.exp / 100);
-            gameState.level += levelsGained;
-            gameState.exp %= 100;
-            const hpIncrease = levelsGained * 8;
-            gameState.maxHp += hpIncrease;
-            gameState.currentHp = gameState.maxHp;
-
-            log(`🎉 레벨 ${gameState.level}!`, 'success');
-            log(`❤️ HP +${hpIncrease}`, 'info');
-
-            const levelBonus = levelsGained * 25;
-            gameState.coins += levelBonus;
-            gameState.totalScore += levelBonus * 3;
-            log(`💰 +${levelBonus}코인`, 'warning');
-
-            updateAllDisplays();
-            saveGameState();
-        }
-
-        function startBattle() {
-            if (battleTimer) clearTimeout(battleTimer);
-
-            const enemies = [
-                { name: '고블린', emoji: '👹', minDamage: 5, maxDamage: 12, minReward: 8, maxReward: 18 },
-                { name: '오크', emoji: '🧌', minDamage: 8, maxDamage: 15, minReward: 12, maxReward: 25 },
-                { name: '스켈레톤', emoji: '💀', minDamage: 3, maxDamage: 10, minReward: 5, maxReward: 15 },
-                { name: '드래곤', emoji: '🐲', minDamage: 15, maxDamage: 25, minReward: 30, maxReward: 50 },
-                { name: '마법사', emoji: '🧙‍♂️', minDamage: 10, maxDamage: 20, minReward: 20, maxReward: 35 }
-            ];
-
-            const enemy = enemies[Math.floor(Math.random() * enemies.length)];
-            const baseDamage = Math.floor(Math.random() * (enemy.maxDamage - enemy.minDamage + 1)) + enemy.minDamage;
-            const damage = Math.max(0, baseDamage - attackBoost);
-            let coinReward = Math.floor(Math.random() * (enemy.maxReward - enemy.minReward + 1)) + enemy.minReward;
-            const expReward = Math.floor(coinReward / 2);
-
-            if (coinBoostEndTime > Date.now()) coinReward *= 2;
-
-            log(`⚔️ ${enemy.emoji} ${enemy.name} 전투`, 'warning');
-
-            battleTimer = setTimeout(() => {
-                const win = isLuckyCharmActive || Math.random() > 0.2;
-                if (win) {
-                    log(`💥 ${enemy.name} 격파!`, 'success');
-                    log(`🏆 +${coinReward}코인, +${expReward}EXP`, 'success');
-                    gameState.coins += coinReward;
-                    gameState.exp += expReward;
-                    gameState.totalScore += coinReward * 3;
-                    if (gameState.exp >= 100) levelUp();
-                } else {
-                    const lostHp = Math.floor(Math.random() * 10) + 5;
-                    gameState.currentHp = Math.max(0, gameState.currentHp - lostHp);
-                    log(`💔 ${enemy.name} 패배, HP -${lostHp}`, 'error');
-                    if (gameState.currentHp <= 0) {
-                        log(`😵 체력 소진! 5초 후 부활`, 'error');
-                        battleTimer = setTimeout(() => {
-                            gameState.currentHp = Math.floor(gameState.maxHp * 0.5);
-                            log(`🌟 부활! HP 회복`, 'info');
-                            updateAllDisplays();
-                            saveGameState();
-                        }, 5000);
+            // 승리 체크
+            for (let row = 0; row < boardSize; row++) {
+                for (let col = 0; col < boardSize; col++) {
+                    if (board[row][col] === currentPlayer && checkWin(row, col)) {
+                        const winner = currentPlayer === 1 ? player1Name : player2Name;
+                        showModal(`${winner}님 승리!`, 'success', true);
+                        clearInterval(timerId);
+                        gameActive = false;
+                        return;
                     }
                 }
+            }
 
-                if (isLuckyCharmActive) {
-                    isLuckyCharmActive = false;
-                    log('🍀 행운의 부적 종료', 'info');
-                }
-
-                updateAllDisplays();
-                saveGameState();
-                battleTimer = null;
-            }, 1500);
+            currentPlayer = currentPlayer === 1 ? 2 : 1;
+            updateTurnInfo();
+            updateSkillButton();
+            updateEggSkillButton();
+            startTimer();
         }
 
-        function showShop() {
-            const shopItems = [
-                { name: '체력 물약', price: 30, emoji: '🧪', effect: 'HP +15' },
-                { name: '경험치 물약', price: 50, emoji: '✨', effect: 'EXP +25' },
-                { name: '행운의 부적', price: 100, emoji: '🍀', effect: '다음 전투 승리' },
-                { name: '코인 부스터', price: 150, emoji: '💎', effect: '1시간 코인 2배' },
-                { name: '전설의 검', price: 500, emoji: '⚔️', effect: '공격력 증가' }
-            ];
+        function toggleEggSkillMode() {
+            if (!gameActive) return;
+            const skillCount = currentPlayer === 1 ? player1EggSkill : player2EggSkill;
+            if (skillCount <= 0) {
+                showModal('알까기 스킬 사용 횟수가 없습니다!', 'error');
+                return;
+            }
 
-            const modal = document.createElement('div');
-            modal.className = 'modal';
-            modal.innerHTML = `
-                <div class="modal-content">
-                    <h2>🏪 상점</h2>
-                    <p>코인: ${gameState.coins}💰</p>
-                    <ul>
-                        ${shopItems.map((item, index) => `
-                            <li>
-                                ${item.emoji} ${item.name} - ${item.price}코인
-                                <br><button ${gameState.coins >= item.price ? '' : 'disabled'} onclick="buyItemFromModal(${index}, '${item.name}', ${item.price}, '${item.effect}', '${item.emoji}')">
-                                    ${gameState.coins >= item.price ? '구매' : '부족'}
-                                </button>
-                            </li>
-                        `).join('')}
-                    </ul>
-                    <button onclick="closeModal()">닫기</button>
-                </div>
-            `;
-            document.body.appendChild(modal);
-        }
-
-        function buyItemFromModal(index, name, price, effect, emoji) {
-            buyItem({ name, price, effect, emoji });
-            closeModal();
-        }
-
-        function buyItem(item) {
-            if (gameState.coins >= item.price) {
-                gameState.coins -= item.price;
-                log(`🛒 ${item.name} 구매`, 'success');
-                log(`💡 ${item.effect}`, 'info');
-
-                switch (item.name) {
-                    case '체력 물약':
-                        gameState.currentHp = Math.min(gameState.maxHp, gameState.currentHp + 15);
-                        break;
-                    case '경험치 물약':
-                        gameState.exp += 25;
-                        if (gameState.exp >= 100) levelUp();
-                        break;
-                    case '행운의 부적':
-                        isLuckyCharmActive = true;
-                        log('🍀 다음 전투 승리!', 'warning');
-                        break;
-                    case '코인 부스터':
-                        coinBoostEndTime = Date.now() + 3600000;
-                        log('💎 코인 2배 시작!', 'warning');
-                        break;
-                    case '전설의 검':
-                        attackBoost += 5;
-                        log('⚔️ 공격력 증가!', 'warning');
-                        break;
-                }
-
-                updateAllDisplays();
-                saveGameState();
+            isEggSkillMode = !isEggSkillMode;
+            selectedRow = -1;
+            selectedCol = -1;
+            if (isEggSkillMode) {
+                if (timerId) clearInterval(timerId); // 타이머 중지
+                log(`🪶 ${currentPlayer === 1 ? player1Name : player2Name}님 알까기 모드 활성화! 자신의 돌 선택`, 'warning');
             } else {
-                log('💸 코인 부족!', 'error');
+                updateEggSkillButton();
+                startTimer();
+            }
+            updateEggSkillButton();
+        }
+
+        function updateEggSkillButton() {
+            const skillCount = currentPlayer === 1 ? player1EggSkill : player2EggSkill;
+            const eggSkillBtn = document.getElementById('egg-skill-btn');
+            eggSkillBtn.disabled = skillCount <= 0 && !isEggSkillMode;
+            eggSkillBtn.textContent = isEggSkillMode ? '알까기 취소' : `알까기 (${skillCount})`;
+        }
+
+        function updateSkillButton() {
+            const skillCount = currentPlayer === 1 ? player1MeteorSkill : player2MeteorSkill;
+            const skillBtn = document.getElementById('skill-btn');
+            skillBtn.disabled = skillCount <= 0;
+            skillBtn.textContent = `운석 낙하 (${skillCount})`;
+        }
+
+        function handleCanvasMouseDown(event) {
+            if (!gameActive || !isEggSkillMode) return;
+            const rect = canvas.getBoundingClientRect();
+            dragStartX = event.clientX - rect.left;
+            dragStartY = event.clientY - rect.top;
+            const col = Math.floor(dragStartX / cellSize);
+            const row = Math.floor(dragStartY / cellSize);
+
+            if (row < 0 || row >= boardSize || col < 0 || col >= boardSize) return;
+            if (board[row][col] === currentPlayer) {
+                selectedRow = row;
+                selectedCol = col;
+                isDragging = true;
+                log(`🪶 자신의 돌 (${row + 1}, ${col + 1}) 선택. 드래그하여 방향 선택`, 'info');
             }
         }
 
-        function showRanking() {
-            const rankings = [
-                { name: 'DragonMaster', level: 28, score: 18500 },
-                { name: 'ShadowNinja', level: 25, score: 16200 },
-                { name: 'FireWizard', level: 23, score: 14800 },
-                { name: playerName, level: gameState.level, score: gameState.totalScore }
-            ].sort((a, b) => b.score - a.score);
-
-            const modal = document.createElement('div');
-            modal.className = 'modal';
-            modal.innerHTML = `
-                <div class="modal-content">
-                    <h2>🏆 랭킹</h2>
-                    <ul>
-                        ${rankings.map((player, index) => {
-                            const rank = index + 1;
-                            const crown = rank === 1 ? '👑' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : `${rank}.`;
-                            const isMe = player.name === playerName ? ' ⭐' : '';
-                            return `
-                                <li>
-                                    ${crown} ${player.name}${isMe}
-                                    <br>Lv.${player.level} | ${player.score.toLocaleString()}점
-                                </li>
-                            `;
-                        }).join('')}
-                    </ul>
-                    <button onclick="closeModal()">닫기</button>
-                </div>
-            `;
-            document.body.appendChild(modal);
+        function handleCanvasMouseMove(event) {
+            if (!isDragging || !isEggSkillMode) return;
+            const rect = canvas.getBoundingClientRect();
+            dragEndX = event.clientX - rect.left;
+            dragEndY = event.clientY - rect.top;
+            drawBoard();
+            // 고무줄 효과
+            ctx.strokeStyle = 'rgba(255, 0, 0, 0.5)';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(cellSize / 2 + selectedCol * cellSize, cellSize / 2 + selectedRow * cellSize);
+            ctx.lineTo(dragEndX, dragEndY);
+            ctx.stroke();
         }
 
-        function showModal(message, type = 'info') {
+        function handleCanvasMouseUp(event) {
+            if (!isDragging || !isEggSkillMode) return;
+            isDragging = false;
+            const rect = canvas.getBoundingClientRect();
+            dragEndX = event.clientX - rect.left;
+            dragEndY = event.clientY - rect.top;
+
+            // 방향 계산
+            const dx = dragEndX - (cellSize / 2 + selectedCol * cellSize);
+            const dy = dragEndY - (cellSize / 2 + selectedRow * cellSize);
+            const angle = Math.atan2(dy, dx);
+            const threshold = cellSize * 0.5; // 대각선 판단을 위한 임계값
+            let dr, dc;
+
+            // 방향 결정: 가로, 세로, 우하, 좌하
+            if (Math.abs(dx) > Math.abs(dy) && (Math.abs(angle) < Math.PI / 4 || Math.abs(angle) > 3 * Math.PI / 4)) {
+                // 가로
+                dr = 0;
+                dc = dx > 0 ? 1 : -1;
+            } else if (Math.abs(dy) > Math.abs(dx) && (Math.abs(angle) > Math.PI / 4 && Math.abs(angle) < 3 * Math.PI / 4)) {
+                // 세로
+                dr = dy > 0 ? 1 : -1;
+                dc = 0;
+            } else if (dx > 0 && dy > 0 && Math.abs(dx - dy) < threshold) {
+                // 우하 대각선
+                dr = 1;
+                dc = 1;
+            } else if (dx < 0 && dy > 0 && Math.abs(dx + dy) < threshold) {
+                // 좌하 대각선
+                dr = 1;
+                dc = -1;
+            } else {
+                // 유효하지 않은 드래그, 취소
+                isEggSkillMode = false;
+                updateEggSkillButton();
+                startTimer();
+                log(`🪶 알까기 방향 선택 실패. 다시 시도하세요.`, 'error');
+                return;
+            }
+
+            // 애니메이션: 돌 이동 및 상대 돌 제거
+            const stonesToRemove = [];
+            let row = selectedRow;
+            let col = selectedCol;
+            while (row >= 0 && row < boardSize && col >= 0 && col < boardSize) {
+                if (board[row][col] === (currentPlayer === 1 ? 2 : 1)) {
+                    stonesToRemove.push({ row, col });
+                }
+                row += dr;
+                col += dc;
+            }
+
+            let animationProgress = 0;
+            const animationDuration = 500; // 500ms
+            function animate() {
+                drawBoard();
+                const t = animationProgress / animationDuration;
+                const opacity = 1 - t; // 페이드아웃
+                const moveDistance = t * 5 * cellSize; // 5칸 이동
+                const moveX = cellSize / 2 + selectedCol * cellSize + moveDistance * dc;
+                const moveY = cellSize / 2 + selectedRow * cellSize + moveDistance * dr;
+                ctx.fillStyle = currentPlayer === 1 ? '#000' : '#fff';
+                drawStone(selectedRow, selectedCol, opacity);
+                ctx.beginPath();
+                ctx.arc(moveX, moveY, cellSize / 2 - 2, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.strokeStyle = '#333';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+
+                stonesToRemove.forEach(({ row, col }) => {
+                    ctx.fillStyle = currentPlayer === 1 ? '#fff' : '#000';
+                    drawStone(row, col, opacity);
+                });
+
+                animationProgress += 16; // 약 60fps
+                if (animationProgress < animationDuration) {
+                    animationFrameId = requestAnimationFrame(animate);
+                } else {
+                    // 애니메이션 종료
+                    cancelAnimationFrame(animationFrameId);
+                    board[selectedRow][selectedCol] = 0; // 선택한 돌 제거
+                    stonesToRemove.forEach(({ row, col }) => {
+                        board[row][col] = 0;
+                        log(`🪶 상대 돌 (${row + 1}, ${col + 1}) 제거!`, 'warning');
+                    });
+                    drawBoard();
+                    log(`🪶 ${currentPlayer === 1 ? player1Name : player2Name}님이 알까기 스킬 사용!`, 'warning');
+                    if (currentPlayer === 1) player1EggSkill--;
+                    else player2EggSkill--;
+                    isEggSkillMode = false;
+                    updateEggSkillButton();
+                    currentPlayer = currentPlayer === 1 ? 2 : 1;
+                    updateTurnInfo();
+                    updateSkillButton();
+                    startTimer();
+                }
+            }
+            animationFrameId = requestAnimationFrame(animate);
+        }
+
+        function handleCanvasClick(event) {
+            if (!gameActive || isEggSkillMode) return;
+
+            const rect = canvas.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+            const col = Math.floor(x / cellSize);
+            const row = Math.floor(y / cellSize);
+
+            if (row < 0 || row >= boardSize || col < 0 || col >= boardSize) return;
+            if (board[row][col] !== 0) return;
+
+            board[row][col] = currentPlayer;
+            moveCount++;
+            drawBoard();
+            log(`${currentPlayer === 1 ? player1Name : player2Name}님이 (${row + 1}, ${col + 1})에 돌 배치`, 'info');
+
+            removeRandomOpponentStone();
+
+            if (checkWin(row, col)) {
+                const winner = currentPlayer === 1 ? player1Name : player2Name;
+                showModal(`${winner}님 승리!`, 'success', true);
+                clearInterval(timerId);
+                gameActive = false;
+                return;
+            }
+
+            currentPlayer = currentPlayer === 1 ? 2 : 1;
+            updateTurnInfo();
+            updateSkillButton();
+            updateEggSkillButton();
+            startTimer();
+        }
+
+        function checkWin(row, col) {
+            const directions = [
+                [0, 1], [1, 0], [1, 1], [1, -1] // 가로, 세로, 대각선(우하, 좌하)
+            ];
+            const player = board[row][col];
+
+            for (const [dr, dc] of directions) {
+                let count = 1;
+                for (let dir = -1; dir <= 1; dir += 2) {
+                    for (let i = 1; i <= 4; i++) {
+                        const newRow = row + dr * i * dir;
+                        const newCol = col + dc * i * dir;
+                        if (
+                            newRow >= 0 && newRow < boardSize &&
+                            newCol >= 0 && newCol < boardSize &&
+                            board[newRow][newCol] === player
+                        ) {
+                            count++;
+                        } else {
+                            break;
+                        }
+                    }
+                }
+                if (count >= 5) return true;
+            }
+            return false;
+        }
+
+        function updateTurnInfo() {
+            const turnInfo = document.getElementById('turn-info');
+            const playerName = currentPlayer === 1 ? player1Name : player2Name;
+            const stone = currentPlayer === 1 ? '● 흑돌' : '○ 백돌';
+            turnInfo.innerHTML = `턴: <span>${playerName}</span> (${stone})`;
+        }
+
+        function showModal(message, type = 'error', showRestart = false) {
             const modal = document.createElement('div');
             modal.className = 'modal';
             modal.innerHTML = `
                 <div class="modal-content">
-                    <h2 class="log-${type}">${message}</h2>
+                    <h2 style="color: ${type === 'success' ? '#27ae60' : '#e74c3c'}">${message}</h2>
                     <button onclick="closeModal()">확인</button>
+                    ${showRestart ? '<button onclick="restartGame()">다시 시작</button>' : ''}
                 </div>
             `;
             document.body.appendChild(modal);
@@ -853,50 +761,28 @@
             if (modal) modal.remove();
         }
 
-        function showStats() {
-            log('📊 통계', 'info');
-            log(`👤 ${playerName}`, 'info');
-            log(`⭐ Lv.${gameState.level} (${getLevelTitle()})`, 'info');
-            log(`💎 ${gameState.totalScore.toLocaleString()}점`, 'info');
-            log(`💰 ${gameState.coins.toLocaleString()}코인`, 'info');
-            log(`📝 기록 ${gameState.deedsRecorded}개`, 'info');
-            log(`❤️ HP ${gameState.currentHp}/${gameState.maxHp}`, 'info');
-        }
-
-        function getLevelTitle() {
-            for (let level of Object.keys(levelTitles).sort((a, b) => b - a)) {
-                if (gameState.level >= parseInt(level)) return levelTitles[level];
-            }
-            return levelTitles[1];
-        }
-
-        function getCharacterAvatar() {
-            if (gameState.level >= 30) return '👑';
-            if (gameState.level >= 25) return '⚡';
-            if (gameState.level >= 20) return '🔥';
-            if (gameState.level >= 15) return '⚔️';
-            if (gameState.level >= 10) return '🛡️';
-            if (gameState.level >= 5) return '🗡️';
-            return '🧙‍♂️';
-        }
-
-        function updateAllDisplays() {
-            document.getElementById('player-name').textContent = playerName;
-            document.getElementById('player-title').textContent = getLevelTitle();
-            document.getElementById('player-avatar').textContent = getCharacterAvatar();
-            document.getElementById('header-coins').textContent = gameState.coins.toLocaleString();
-            document.getElementById('header-score').textContent = gameState.totalScore.toLocaleString();
-            document.getElementById('header-level').textContent = gameState.level;
-            document.getElementById('character-avatar').textContent = getCharacterAvatar();
-            document.getElementById('level').textContent = gameState.level;
-            document.getElementById('level-title').textContent = getLevelTitle();
-            document.getElementById('exp').textContent = gameState.exp;
-            document.getElementById('exp-fill').style.width = gameState.exp + '%';
-            document.getElementById('current-hp').textContent = gameState.currentHp;
-            document.getElementById('max-hp').textContent = gameState.maxHp;
-            document.getElementById('coins').textContent = gameState.coins.toLocaleString();
-            document.getElementById('total-score').textContent = gameState.totalScore.toLocaleString();
-            document.getElementById('deeds-count').textContent = gameState.deedsRecorded;
+        function restartGame() {
+            if (animationFrameId) cancelAnimationFrame(animationFrameId);
+            board = Array(boardSize).fill().map(() => Array(boardSize).fill(0));
+            currentPlayer = 1;
+            gameActive = true;
+            moveCount = 0;
+            player1MeteorSkill = 2;
+            player2MeteorSkill = 2;
+            player1EggSkill = 3;
+            player2EggSkill = 3;
+            isEggSkillMode = false;
+            selectedRow = -1;
+            selectedCol = -1;
+            isDragging = false;
+            logs = [];
+            log('🎉 새 게임 시작!', 'info');
+            drawBoard();
+            updateTurnInfo();
+            updateSkillButton();
+            updateEggSkillButton();
+            startTimer();
+            closeModal();
         }
 
         function log(message, type = 'info') {
@@ -909,16 +795,10 @@
             logContainer.scrollTop = logContainer.scrollHeight;
         }
 
-        function saveGameState() {
-            localStorage.setItem('gameState', JSON.stringify(gameState));
-        }
-
-        setInterval(() => {
-            if (playerName) {
-                saveGameState();
-                log('💾 자동 저장', 'info');
-            }
-        }, 30000);
+        canvas.addEventListener('click', handleCanvasClick);
+        canvas.addEventListener('mousedown', handleCanvasMouseDown);
+        canvas.addEventListener('mousemove', handleCanvasMouseMove);
+        canvas.addEventListener('mouseup', handleCanvasMouseUp);
     </script>
 </body>
 </html>
